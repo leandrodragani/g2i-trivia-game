@@ -3,14 +3,22 @@ import { TouchableOpacity, TouchableOpacityProps } from "react-native";
 import { ThemeContext } from "styled-components/native";
 import { Ionicons } from "@expo/vector-icons";
 import { Box, Text } from "components";
+import { AllHtmlEntities } from "html-entities";
 
 export interface AnswerCardProps extends TouchableOpacityProps {
   answer: string;
   selected?: boolean;
+  error?: boolean;
 }
 
-export function AnswerCard({ answer, selected, ...props }: AnswerCardProps) {
+export function AnswerCard({
+  answer,
+  selected,
+  error,
+  ...props
+}: AnswerCardProps) {
   const theme = useContext(ThemeContext);
+  const entities = new AllHtmlEntities();
   return (
     <TouchableOpacity {...props} activeOpacity={0.75}>
       <Box
@@ -29,13 +37,19 @@ export function AnswerCard({ answer, selected, ...props }: AnswerCardProps) {
           fontFamily={theme.font.medium}
           fontSize={16}
         >
-          {answer}
+          {entities.decode(answer)}
         </Text>
         {selected ? (
           <Ionicons
             name="ios-checkmark-circle"
             size={24}
             color={theme.colors.green[500]}
+          />
+        ) : error ? (
+          <Ionicons
+            name="ios-close-circle"
+            size={24}
+            color={theme.colors.red[500]}
           />
         ) : null}
       </Box>

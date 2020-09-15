@@ -66,6 +66,7 @@ export function GameSettings({
                 key={item.id}
                 name={item.name}
                 onPress={handleSelection(item)}
+                selected={value?.id == item.id}
               />
             )}
           />

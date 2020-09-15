@@ -1,44 +1,65 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { ThemeContext } from "styled-components/native";
 import useSWR from "swr";
 import { ScreenProps } from "navigation";
 import { CategoryResponse } from "api";
 import {
   Box,
+  GameSettingsOption,
+  Container,
   Text,
   Button,
   GameSettings,
-  GameSettingsOption,
 } from "components";
 
 type HomeScreenProps = ScreenProps<"Home">;
 
+interface HomeState {
+  difficulty: GameSettingsOption | null;
+  gameType: GameSettingsOption | null;
+  category: GameSettingsOption | null;
+}
+
+const initialState: HomeState = {
+  category: null,
+  difficulty: null,
+  gameType: null,
+};
+
 export default function Home({ navigation }: HomeScreenProps) {
+  const [state, setState] = useState<HomeState>(initialState);
   const theme = useContext(ThemeContext);
 
   const { data: categories, error } = useSWR<CategoryResponse>(
     "/api_category.php"
   );
-  const difficulty: GameSettingsOption[] = [
+  const difficultyLevels: GameSettingsOption[] = [
     { id: "easy", name: "Easy" },
     { id: "medium", name: "Medium" },
     { id: "hard", name: "Hard" },
   ];
 
-  const gameType: GameSettingsOption[] = [
+  const gameTypes: GameSettingsOption[] = [
     { id: "boolean", name: "True/False" },
     { id: "multiple", name: "Multiple" },
   ];
 
-  const startQuiz = () => navigation.navigate("Quiz");
+  const startQuiz = () => {
+    navigation.navigate("Quiz", {
+      settings: state,
+    });
+  };
+
+  const handleGameSettings = (prop: keyof HomeState) => (
+    selected: GameSettingsOption | null
+  ) => {
+    setState({ ...state, [prop]: selected });
+  };
+
+  const { category, difficulty, gameType } = state;
 
   return (
-    <Box
-      flex={1}
-      alignItems="center"
-      justifyContent="center"
-      backgroundColor={theme.colors.gray[900]}
-    >
+    <Container>
       <Text
         fontSize={54}
         fontFamily={theme.font.bold}
@@ -58,26 +79,26 @@ export default function Home({ navigation }: HomeScreenProps) {
         <GameSettings
           label="Category"
           title="Select category"
-          value={null}
+          value={category}
           defaultValue="All"
           options={categories?.trivia_categories as GameSettingsOption[]}
-          onSelect={(selected) => console.log(selected)}
+          onSelect={handleGameSettings("category")}
         />
         <GameSettings
           label="Difficulty"
           title="Select difficulty level"
-          value={null}
-          options={difficulty}
+          value={difficulty}
+          options={difficultyLevels}
           defaultValue="Any"
-          onSelect={(selected) => console.log(selected)}
+          onSelect={handleGameSettings("difficulty")}
         />
         <GameSettings
           label="Game type"
           title="Select game type"
-          value={null}
+          value={gameType}
           defaultValue="Any"
-          options={gameType}
-          onSelect={(selected) => console.log(selected)}
+          options={gameTypes}
+          onSelect={handleGameSettings("gameType")}
         />
       </Box>
       <Button
@@ -85,6 +106,6 @@ export default function Home({ navigation }: HomeScreenProps) {
         label="Start"
         onPress={startQuiz}
       />
-    </Box>
+    </Container>
   );
 }

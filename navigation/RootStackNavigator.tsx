@@ -2,19 +2,31 @@ import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import Home from "screens/home";
 import Quiz from "screens/quiz";
+import Results from "screens/results";
+import { GameSettingsOption } from "components";
+import { Result } from "api";
 
 export type RootStackParamList = {
   Home: undefined;
-  Quiz: undefined;
+  Quiz: {
+    settings: {
+      [key: string]: GameSettingsOption | null;
+    };
+  };
+  Results: {
+    answers: any;
+    results: Result[];
+  }
 };
 
 const Stack = createStackNavigator();
 
 export function RootStackNavigator() {
   return (
-    <Stack.Navigator initialRouteName="Login" headerMode="none">
+    <Stack.Navigator initialRouteName="Home" headerMode="none">
       <Stack.Screen name="Home" component={Home} />
       <Stack.Screen name="Quiz" component={Quiz} />
+      <Stack.Screen name="Results" component={Results} />
     </Stack.Navigator>
   );
 }

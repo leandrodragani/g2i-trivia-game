@@ -16,6 +16,8 @@ export function Badge({ color, label }: BadgeProps) {
         fontFamily={theme.font.medium}
         fontSize={14}
         style={{ textTransform: "uppercase" }}
+        numberOfLines={1}
+        ellipsizeMode="tail"
       >
         {label}
       </Text>
