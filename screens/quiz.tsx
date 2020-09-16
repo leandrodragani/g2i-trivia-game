@@ -7,7 +7,8 @@ import { Box, Text, Button, AnswerCard, Container } from "components";
 import { Result, Response } from "api";
 import { AllHtmlEntities } from "html-entities";
 import { objectToQueryParams } from "utils/strings";
-import { StackActions, CommonActions } from "@react-navigation/native";
+import { useBeforeLeave } from "utils/hooks";
+import { CommonActions } from "@react-navigation/native";
 
 type QuizScreenProps = ScreenProps<"Quiz">;
 
@@ -65,31 +66,10 @@ export default function Quiz({ navigation, route }: QuizScreenProps) {
   const [currentAnswer, setCurrentAnswer] = useState<string>("");
   const [currentIndex, setCurrentIndex] = useState<number>(0);
 
-  useEffect(
-    () =>
-      navigation.addListener("beforeRemove", (e) => {
-        if (!isGameInProgress) {
-          return;
-        }
-
-        e.preventDefault();
-
-        Alert.alert(
-          "Exit game",
-          "You will lose your progress, are you sure you want to leave ?",
-          [
-            { text: "Cancel", style: "cancel", onPress: () => {} },
-            {
-              text: "Leave",
-              style: "destructive",
-              onPress: () => navigation.dispatch(e.data.action),
-            },
-          ]
-        );
-      }),
-
-    [navigation, isGameInProgress]
-  );
+  useBeforeLeave(isGameInProgress, {
+    title: "Exit game",
+    message: "You will lose your progress, are you sure you want to leave?",
+  });
 
   useEffect(() => {
     if (!isGameInProgress) {
