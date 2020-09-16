@@ -2,7 +2,8 @@ import React, { useContext } from "react";
 import { ThemeContext } from "styled-components/native";
 import { Modal, ModalProps, TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import { Box, Text } from "components";
+import { Text } from "./text";
+import { Box } from "./box";
 
 export interface BottomSheetProps extends ModalProps {
   title: string;

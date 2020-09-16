@@ -2,7 +2,8 @@ import React, { useContext } from "react";
 import { TouchableOpacity, TouchableOpacityProps } from "react-native";
 import { ThemeContext } from "styled-components/native";
 import { Ionicons } from "@expo/vector-icons";
-import { Box, Text } from "components";
+import { Text } from "./text";
+import { Box } from "./box";
 import { AllHtmlEntities } from "html-entities";
 
 export interface AnswerCardProps extends TouchableOpacityProps {

@@ -1,7 +1,9 @@
 import React, { useContext } from "react";
 import { TouchableOpacity } from "react-native";
 import { ThemeContext } from "styled-components/native";
-import { Text, Box, Badge } from "components";
+import { Text } from "./text";
+import { Box } from "./box";
+import { Badge } from "./badge";
 
 interface GameSettingsCardProps {
   label: string;

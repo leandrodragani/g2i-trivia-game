@@ -1,6 +1,7 @@
 import React, { useContext } from "react";
 import { ThemeContext } from "styled-components/native";
-import { Box, Text } from "components";
+import { Text } from "./text";
+import { Box } from "./box";
 
 export interface BadgeProps {
   color: string;

@@ -1,11 +1,9 @@
 import React, { useContext } from "react";
 import { FlatList, TouchableOpacity } from "react-native";
 import { ThemeContext } from "styled-components/native";
-import {
-  BottomSheet,
-  MenuItem,
-  GameSettingsCard
-} from "components";
+import { BottomSheet } from "./bottom-sheet";
+import { MenuItem } from "./menu-item";
+import { GameSettingsCard } from "./game-settings-card";
 import { useModal } from "utils/hooks";
 
 export interface GameSettingsOption {

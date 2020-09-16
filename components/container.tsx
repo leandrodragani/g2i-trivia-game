@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import { ThemeContext } from "styled-components/native";
-import { Box } from "components";
+import { Box } from "./box";
 
 export interface ContainerProps {
   children: React.ReactNode;

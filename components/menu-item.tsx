@@ -2,7 +2,8 @@ import React, { useContext } from "react";
 import { TouchableOpacity, TouchableOpacityProps } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { ThemeContext } from "styled-components/native";
-import { Box, Text } from "components";
+import { Box } from "./box";
+import { Text } from "./text";
 
 export interface MenuItemProps extends TouchableOpacityProps {
   name: string;
