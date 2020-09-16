@@ -87,11 +87,11 @@ export default function Results({ navigation, route }: ResultsScreenProps) {
       <Box flex={0.5}>
         <FlatList
           data={results}
+          keyExtractor={(item) => item.question}
           renderItem={({ item, index }) => {
             const answers = [item.correct_answer, ...item.incorrect_answers];
             return (
               <ResultItem
-                key={item.question}
                 {...{ answers }}
                 question={item.question}
                 userAnswer={userAnswers[index]}

@@ -65,14 +65,6 @@ export default function Quiz({ navigation, route }: QuizScreenProps) {
   const [currentAnswer, setCurrentAnswer] = useState<string>("");
   const [currentIndex, setCurrentIndex] = useState<number>(0);
 
-  if (!results || isValidating) {
-    return (
-      <Container>
-        <ActivityIndicator color={theme.colors.gray[500]} size="large" />
-      </Container>
-    );
-  }
-
   useEffect(
     () =>
       navigation.addListener("beforeRemove", (e) => {
@@ -109,7 +101,7 @@ export default function Quiz({ navigation, route }: QuizScreenProps) {
             name: "Results",
             params: {
               answers: userAnswers,
-              results: results.results,
+              results: results?.results,
             },
           },
         ],
@@ -117,6 +109,14 @@ export default function Quiz({ navigation, route }: QuizScreenProps) {
       navigation.dispatch(resetAction);
     }
   }, [isGameInProgress, navigation]);
+
+  if (!results || isValidating) {
+    return (
+      <Container>
+        <ActivityIndicator color={theme.colors.gray[500]} size="large" />
+      </Container>
+    );
+  }
 
   const makeAnswer = (answer: string) => () => setCurrentAnswer(answer);
 
