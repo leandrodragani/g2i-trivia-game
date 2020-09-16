@@ -6,6 +6,8 @@ import { ScreenProps } from "navigation";
 import { Box, Text, Button, AnswerCard, Container } from "components";
 import { Result, Response } from "api";
 import { AllHtmlEntities } from "html-entities";
+import { objectToQueryParams } from "utils/strings";
+import { StackActions, CommonActions } from "@react-navigation/native";
 
 type QuizScreenProps = ScreenProps<"Quiz">;
 
@@ -34,25 +36,16 @@ function QuestionCard({ children }: { children: string }) {
 }
 
 function useResults(shouldFetch: boolean, options: any) {
-  const sanitize = (object: any) => {
-    Object.keys(object).forEach((key) =>
-      object[key] === undefined || object[key] === null
-        ? delete object[key]
-        : {}
-    );
-    return object;
-  };
+  const queryString = objectToQueryParams(options);
 
-  const queryString = new URLSearchParams(sanitize(options)).toString();
-
-  const { data } = useSWR<Response<Result>>(
+  const { data, isValidating } = useSWR<Response<Result>>(
     shouldFetch ? `/api.php?${queryString}` : null,
     {
       revalidateOnFocus: false,
     }
   );
 
-  return { data };
+  return { data, isValidating };
 }
 
 export default function Quiz({ navigation, route }: QuizScreenProps) {
@@ -61,16 +54,21 @@ export default function Quiz({ navigation, route }: QuizScreenProps) {
     settings: { category, gameType, difficulty },
   } = route.params;
 
-  const { data: results } = useResults(true, {
+  const { data: results, isValidating } = useResults(true, {
     category: category?.id,
     type: gameType?.id,
     difficulty: difficulty?.id,
     amount: 10,
   });
+  const [isGameInProgress, setIsGameInProgress] = useState<boolean>(true);
 
   useEffect(
     () =>
       navigation.addListener("beforeRemove", (e) => {
+        if (!isGameInProgress) {
+          return;
+        }
+
         e.preventDefault();
 
         Alert.alert(
@@ -86,14 +84,34 @@ export default function Quiz({ navigation, route }: QuizScreenProps) {
           ]
         );
       }),
-    [navigation]
+
+    [navigation, isGameInProgress]
   );
+
+  useEffect(() => {
+    if (!isGameInProgress) {
+      const resetAction = CommonActions.reset({
+        index: 0,
+        routes: [
+          { name: "Home" },
+          {
+            name: "Results",
+            params: {
+              answers: userAnswers,
+              results: results.results,
+            },
+          },
+        ],
+      });
+      navigation.dispatch(resetAction);
+    }
+  }, [isGameInProgress, navigation]);
 
   const [userAnswers, setUserAnswers] = useState({});
   const [currentAnswer, setCurrentAnswer] = useState<string>("");
   const [currentIndex, setCurrentIndex] = useState<number>(0);
 
-  if (!results) {
+  if (!results || isValidating) {
     return (
       <Container>
         <ActivityIndicator color={theme.colors.gray[500]} size="large" />
@@ -106,12 +124,8 @@ export default function Quiz({ navigation, route }: QuizScreenProps) {
   const handleNext = () => {
     setUserAnswers({ ...userAnswers, [currentIndex]: currentAnswer });
     setCurrentAnswer("");
-    console.log(userAnswers);
-    if (currentIndex === results.results?.length - 1) {
-      navigation.navigate("Results", {
-        answers: userAnswers,
-        results: results.results,
-      });
+    if (currentIndex === results.results.length - 1) {
+      setIsGameInProgress(false);
     } else {
       setCurrentIndex(currentIndex + 1);
     }
@@ -128,17 +142,15 @@ export default function Quiz({ navigation, route }: QuizScreenProps) {
 
   return (
     <Container>
-      <Box>
-        <Text
-          fontSize={22}
-          color={theme.colors.red[500]}
-          marginBottom={16}
-          fontFamily={theme.font.medium}
-          textAlign="center"
-        >
-          {resultsCategory}
-        </Text>
-      </Box>
+      <Text
+        fontSize={22}
+        color={theme.colors.red[500]}
+        marginBottom={16}
+        fontFamily={theme.font.medium}
+        textAlign="center"
+      >
+        {resultsCategory}
+      </Text>
       <QuestionCard>{question}</QuestionCard>
       <Box marginY={24}>
         {answers.map((answer) => (
@@ -155,6 +167,7 @@ export default function Quiz({ navigation, route }: QuizScreenProps) {
         backgroundColor={theme.colors.red[500]}
         label="Next"
         onPress={handleNext}
+        disabled={!currentAnswer}
       />
     </Container>
   );

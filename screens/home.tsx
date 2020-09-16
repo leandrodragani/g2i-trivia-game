@@ -11,6 +11,7 @@ import {
   Button,
   GameSettings,
 } from "components";
+import { StackActions } from "@react-navigation/native";
 
 type HomeScreenProps = ScreenProps<"Home">;
 
@@ -45,9 +46,11 @@ export default function Home({ navigation }: HomeScreenProps) {
   ];
 
   const startQuiz = () => {
-    navigation.navigate("Quiz", {
+    const pushAction = StackActions.push("Quiz", {
       settings: state,
     });
+
+    navigation.dispatch(pushAction);
   };
 
   const handleGameSettings = (prop: keyof HomeState) => (

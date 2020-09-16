@@ -6,6 +6,7 @@ import { AnswerCard, Button, Container, Text, Box } from "components";
 import { AllHtmlEntities } from "html-entities";
 import { useModal } from "utils/hooks";
 import { Ionicons } from "@expo/vector-icons";
+import { StackActions } from "@react-navigation/native";
 
 type ResultsScreenProps = ScreenProps<"Results">;
 
@@ -51,9 +52,8 @@ function ResultItem({
       </TouchableOpacity>
       {isVisible
         ? answers.map((answer) => (
-            <Box marginBottom={16}>
+            <Box marginBottom={16} key={answer}>
               <AnswerCard
-                key={answer}
                 {...{ answer }}
                 selected={correct_answer === answer}
                 error={userAnswer !== correct_answer && userAnswer === answer}
@@ -71,6 +71,8 @@ export default function Results({ navigation, route }: ResultsScreenProps) {
   const correctAnswers = results.filter(
     ({ correct_answer }, index) => userAnswers[index] === correct_answer
   ).length;
+
+  const playAgain = () => navigation.dispatch(StackActions.popToTop());
 
   return (
     <Container>
@@ -103,7 +105,7 @@ export default function Results({ navigation, route }: ResultsScreenProps) {
         <Button
           backgroundColor={theme.colors.red[500]}
           label="Play again?"
-          onPress={() => navigation.navigate("Home")}
+          onPress={playAgain}
         />
       </Box>
     </Container>

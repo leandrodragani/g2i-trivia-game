@@ -1,6 +1,6 @@
 import React from "react";
 import { TouchableOpacityProps } from "react-native";
-import styled from "styled-components/native";
+import styled, { css } from "styled-components/native";
 import * as SS from "styled-system";
 
 const StyledTouchableOpacity = styled.TouchableOpacity<SS.FlexboxProps>`
@@ -15,6 +15,11 @@ const StyledTouchableOpacity = styled.TouchableOpacity<SS.FlexboxProps>`
   ${SS.flexbox}
   ${SS.border}
   ${SS.space}
+  ${(props) =>
+    props.disabled &&
+    css`
+      opacity: 0.5;
+    `}
 `;
 
 const StyledText = styled.Text<SS.ColorProps>`
