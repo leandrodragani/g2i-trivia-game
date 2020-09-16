@@ -61,6 +61,17 @@ export default function Quiz({ navigation, route }: QuizScreenProps) {
     amount: 10,
   });
   const [isGameInProgress, setIsGameInProgress] = useState<boolean>(true);
+  const [userAnswers, setUserAnswers] = useState({});
+  const [currentAnswer, setCurrentAnswer] = useState<string>("");
+  const [currentIndex, setCurrentIndex] = useState<number>(0);
+
+  if (!results || isValidating) {
+    return (
+      <Container>
+        <ActivityIndicator color={theme.colors.gray[500]} size="large" />
+      </Container>
+    );
+  }
 
   useEffect(
     () =>
@@ -106,18 +117,6 @@ export default function Quiz({ navigation, route }: QuizScreenProps) {
       navigation.dispatch(resetAction);
     }
   }, [isGameInProgress, navigation]);
-
-  const [userAnswers, setUserAnswers] = useState({});
-  const [currentAnswer, setCurrentAnswer] = useState<string>("");
-  const [currentIndex, setCurrentIndex] = useState<number>(0);
-
-  if (!results || isValidating) {
-    return (
-      <Container>
-        <ActivityIndicator color={theme.colors.gray[500]} size="large" />
-      </Container>
-    );
-  }
 
   const makeAnswer = (answer: string) => () => setCurrentAnswer(answer);
 
