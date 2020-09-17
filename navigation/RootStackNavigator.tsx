@@ -3,20 +3,15 @@ import { createStackNavigator } from "@react-navigation/stack";
 import Home from "screens/home";
 import Quiz from "screens/quiz";
 import Results from "screens/results";
-import { GameSettingsOption } from "components";
 import { Result } from "api";
 
 export type RootStackParamList = {
   Home: undefined;
-  Quiz: {
-    settings: {
-      [key: string]: GameSettingsOption | null;
-    };
-  };
+  Quiz: undefined;
   Results: {
     answers: any;
     results: Result[];
-  }
+  };
 };
 
 const Stack = createStackNavigator();

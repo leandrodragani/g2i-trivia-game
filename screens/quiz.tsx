@@ -9,6 +9,7 @@ import { AllHtmlEntities } from "html-entities";
 import { objectToQueryParams } from "utils/strings";
 import { useBeforeLeave } from "utils/hooks";
 import { CommonActions } from "@react-navigation/native";
+import { useGameSettings } from "context";
 
 type QuizScreenProps = ScreenProps<"Quiz">;
 
@@ -49,12 +50,11 @@ function useResults(shouldFetch: boolean, options: any) {
   return { data, isValidating };
 }
 
-export default function Quiz({ navigation, route }: QuizScreenProps) {
+export default function Quiz({ navigation }: QuizScreenProps) {
   const theme = useContext(ThemeContext);
   const {
-    settings: { category, gameType, difficulty },
-  } = route.params;
-
+    state: { category, difficulty, gameType },
+  } = useGameSettings();
   const { data: results, isValidating } = useResults(true, {
     category: category?.id,
     type: gameType?.id,

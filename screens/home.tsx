@@ -1,4 +1,5 @@
-import React, { useContext, useState } from "react";
+import React, { useContext } from "react";
+import { StackActions } from "@react-navigation/native";
 import { ThemeContext } from "styled-components/native";
 import useSWR from "swr";
 import { ScreenProps } from "navigation";
@@ -11,52 +12,34 @@ import {
   Button,
   GameSettings,
 } from "components";
-import { StackActions } from "@react-navigation/native";
+import { useGameSettings } from "context";
 
 type HomeScreenProps = ScreenProps<"Home">;
 
-interface HomeState {
-  difficulty: GameSettingsOption | null;
-  gameType: GameSettingsOption | null;
-  category: GameSettingsOption | null;
-}
+const difficultyLevels: GameSettingsOption[] = [
+  { id: "easy", name: "Easy" },
+  { id: "medium", name: "Medium" },
+  { id: "hard", name: "Hard" },
+];
 
-const initialState: HomeState = {
-  category: null,
-  difficulty: null,
-  gameType: null,
-};
+const gameTypes: GameSettingsOption[] = [
+  { id: "boolean", name: "True/False" },
+  { id: "multiple", name: "Multiple" },
+];
 
 export default function Home({ navigation }: HomeScreenProps) {
-  const [state, setState] = useState<HomeState>(initialState);
+  const { state, setSettings } = useGameSettings();
   const theme = useContext(ThemeContext);
-
   const { data: categories, error } = useSWR<CategoryResponse>(
     "/api_category.php"
   );
-  const difficultyLevels: GameSettingsOption[] = [
-    { id: "easy", name: "Easy" },
-    { id: "medium", name: "Medium" },
-    { id: "hard", name: "Hard" },
-  ];
 
-  const gameTypes: GameSettingsOption[] = [
-    { id: "boolean", name: "True/False" },
-    { id: "multiple", name: "Multiple" },
-  ];
+  const startQuiz = () => navigation.dispatch(StackActions.push("Quiz"));
 
-  const startQuiz = () => {
-    const pushAction = StackActions.push("Quiz", {
-      settings: state,
-    });
-
-    navigation.dispatch(pushAction);
-  };
-
-  const handleGameSettings = (prop: keyof HomeState) => (
+  const handleGameSettings = (prop: string) => (
     selected: GameSettingsOption | null
   ) => {
-    setState({ ...state, [prop]: selected });
+    setSettings(prop, selected);
   };
 
   const { category, difficulty, gameType } = state;

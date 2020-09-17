@@ -7,6 +7,7 @@ import { AllHtmlEntities } from "html-entities";
 import { useModal } from "utils/hooks";
 import { Ionicons } from "@expo/vector-icons";
 import { StackActions } from "@react-navigation/native";
+import { useGameSettings } from "context";
 
 type ResultsScreenProps = ScreenProps<"Results">;
 
@@ -67,12 +68,16 @@ function ResultItem({
 
 export default function Results({ navigation, route }: ResultsScreenProps) {
   const theme = useContext(ThemeContext);
+  const { clearSettings } = useGameSettings();
   const { answers: userAnswers, results } = route.params;
   const correctAnswers = results.filter(
     ({ correct_answer }, index) => userAnswers[index] === correct_answer
   ).length;
 
-  const playAgain = () => navigation.dispatch(StackActions.popToTop());
+  const playAgain = () => {
+    clearSettings();
+    navigation.dispatch(StackActions.popToTop());
+  };
 
   return (
     <Container>

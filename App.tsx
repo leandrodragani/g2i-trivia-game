@@ -1,13 +1,14 @@
 import React from "react";
-import { ThemeProvider } from "styled-components/native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
+import { NavigationContainer } from "@react-navigation/native";
 import { enableScreens } from "react-native-screens";
 import { StatusBar } from "expo-status-bar";
+import { ThemeProvider } from "styled-components/native";
 import { SWRConfig } from "swr";
+import { RootStackNavigator } from "navigation";
+import { GameSettingsProvider } from "context";
 import { useCachedResources } from "utils/hooks";
 import { fetcher } from "utils/axios";
-import { NavigationContainer } from "@react-navigation/native";
-import { RootStackNavigator } from "navigation";
 import theme from "styles/theme";
 enableScreens();
 
@@ -27,8 +28,10 @@ export default function App() {
       >
         <SafeAreaProvider>
           <NavigationContainer>
-            <RootStackNavigator />
-            <StatusBar style="light" />
+            <GameSettingsProvider>
+              <RootStackNavigator />
+              <StatusBar style="light" />
+            </GameSettingsProvider>
           </NavigationContainer>
         </SafeAreaProvider>
       </SWRConfig>
