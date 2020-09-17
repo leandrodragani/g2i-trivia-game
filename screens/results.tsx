@@ -76,7 +76,7 @@ export default function Results({ navigation, route }: ResultsScreenProps) {
 
   return (
     <Container>
-      <Box flex={0.25} alignItems="center" justifyContent="center">
+      <Box flex={1} alignItems="center" justifyContent="center">
         <Text fontSize={30} color="white" fontFamily={theme.font.semibold}>
           Your score
         </Text>
@@ -84,7 +84,7 @@ export default function Results({ navigation, route }: ResultsScreenProps) {
           {correctAnswers} / 10
         </Text>
       </Box>
-      <Box flex={0.5}>
+      <Box flex={2} marginBottom={24}>
         <FlatList
           data={results}
           keyExtractor={(item) => item.question}
@@ -101,7 +101,7 @@ export default function Results({ navigation, route }: ResultsScreenProps) {
           }}
         />
       </Box>
-      <Box marginTop={24}>
+      <Box marginBottom={24}>
         <Button
           backgroundColor={theme.colors.red[500]}
           label="Play again?"

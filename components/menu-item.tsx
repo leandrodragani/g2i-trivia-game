@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { memo, useContext } from "react";
 import { TouchableOpacity, TouchableOpacityProps } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { ThemeContext } from "styled-components/native";
@@ -11,7 +11,7 @@ export interface MenuItemProps extends TouchableOpacityProps {
   selected?: boolean;
 }
 
-export function MenuItem({ name, selected, ...props }: MenuItemProps) {
+export const MenuItem = memo(({ name, selected, ...props }: MenuItemProps) => {
   const theme = useContext(ThemeContext);
   return (
     <TouchableOpacity {...props}>
@@ -38,4 +38,4 @@ export function MenuItem({ name, selected, ...props }: MenuItemProps) {
       </Box>
     </TouchableOpacity>
   );
-}
+});

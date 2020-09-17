@@ -20,38 +20,36 @@ export function AnswerCard({
 }: AnswerCardProps) {
   const theme = useContext(ThemeContext);
   const entities = new AllHtmlEntities();
+  const {
+    colors: { red, green, gray, white },
+    layout: { width },
+    font: { medium },
+  } = theme;
+
   return (
     <TouchableOpacity {...props} activeOpacity={0.75}>
       <Box
         flexDirection="row"
         border={1}
-        width={theme.layout.width - 50}
-        borderColor={theme.colors.gray[800]}
-        bg={selected ? theme.colors.gray[800] : undefined}
+        width={width - 50}
+        borderColor={gray[800]}
+        bg={selected ? gray[800] : undefined}
         alignItems="center"
         justifyContent="space-between"
         borderRadius={8}
         padding={16}
       >
         <Text
-          color={selected ? theme.colors.white : theme.colors.gray[500]}
-          fontFamily={theme.font.medium}
+          color={selected ? white : gray[500]}
+          fontFamily={medium}
           fontSize={16}
         >
           {entities.decode(answer)}
         </Text>
         {selected ? (
-          <Ionicons
-            name="ios-checkmark-circle"
-            size={24}
-            color={theme.colors.green[500]}
-          />
+          <Ionicons name="ios-checkmark-circle" size={24} color={green[500]} />
         ) : error ? (
-          <Ionicons
-            name="ios-close-circle"
-            size={24}
-            color={theme.colors.red[500]}
-          />
+          <Ionicons name="ios-close-circle" size={24} color={red[500]} />
         ) : null}
       </Box>
     </TouchableOpacity>

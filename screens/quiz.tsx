@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect } from "react";
-import { ActivityIndicator, Alert } from "react-native";
+import { ActivityIndicator } from "react-native";
 import { ThemeContext } from "styled-components/native";
 import useSWR from "swr";
 import { ScreenProps } from "navigation";
@@ -25,7 +25,7 @@ function QuestionCard({ children }: { children: string }) {
     >
       <Text
         color={theme.colors.white}
-        fontSize={20}
+        fontSize={18}
         textAlign="center"
         fontFamily={theme.font.semibold}
         lineHeight="40px"
@@ -121,20 +121,23 @@ export default function Quiz({ navigation, route }: QuizScreenProps) {
 
   return (
     <Container>
-      <Text
-        fontSize={22}
-        color={theme.colors.red[500]}
-        marginBottom={16}
-        fontFamily={theme.font.medium}
-        textAlign="center"
-      >
-        {resultsCategory}
-      </Text>
-      <QuestionCard>{question}</QuestionCard>
-      <Box marginY={24}>
+      <Box marginY={24} alignItems="center" justifyContent="center">
+        <Text
+          fontSize={20}
+          color={theme.colors.red[500]}
+          marginBottom={16}
+          fontFamily={theme.font.medium}
+          textAlign="center"
+        >
+          {resultsCategory}
+        </Text>
+        <QuestionCard>{question}</QuestionCard>
+      </Box>
+      <Box flex={1}>
         {answers.map((answer) => (
-          <Box key={answer} marginBottom={16}>
+          <Box marginBottom={16}>
             <AnswerCard
+              key={answer}
               {...{ answer }}
               onPress={makeAnswer(answer)}
               selected={currentAnswer === answer}
@@ -142,12 +145,14 @@ export default function Quiz({ navigation, route }: QuizScreenProps) {
           </Box>
         ))}
       </Box>
-      <Button
-        backgroundColor={theme.colors.red[500]}
-        label="Next"
-        onPress={handleNext}
-        disabled={!currentAnswer}
-      />
+      <Box marginBottom={24}>
+        <Button
+          backgroundColor={theme.colors.red[500]}
+          label="Next"
+          onPress={handleNext}
+          disabled={!currentAnswer}
+        />
+      </Box>
     </Container>
   );
 }

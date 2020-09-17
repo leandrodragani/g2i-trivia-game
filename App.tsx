@@ -16,22 +16,22 @@ export default function App() {
 
   if (!isLoadingComplete) {
     return null;
-  } else {
-    return (
-      <ThemeProvider {...{ theme }}>
-        <SWRConfig
-          value={{
-            fetcher,
-          }}
-        >
-          <SafeAreaProvider>
-            <NavigationContainer>
-              <RootStackNavigator />
-              <StatusBar style="light" />
-            </NavigationContainer>
-          </SafeAreaProvider>
-        </SWRConfig>
-      </ThemeProvider>
-    );
   }
+
+  return (
+    <ThemeProvider {...{ theme }}>
+      <SWRConfig
+        value={{
+          fetcher,
+        }}
+      >
+        <SafeAreaProvider>
+          <NavigationContainer>
+            <RootStackNavigator />
+            <StatusBar style="light" />
+          </NavigationContainer>
+        </SafeAreaProvider>
+      </SWRConfig>
+    </ThemeProvider>
+  );
 }

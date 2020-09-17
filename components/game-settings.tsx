@@ -3,6 +3,7 @@ import { FlatList, TouchableOpacity } from "react-native";
 import { ThemeContext } from "styled-components/native";
 import { BottomSheet } from "./bottom-sheet";
 import { MenuItem } from "./menu-item";
+import { Divider } from "./divider";
 import { GameSettingsCard } from "./game-settings-card";
 import { useModal } from "utils/hooks";
 
@@ -52,16 +53,20 @@ export function GameSettings({
           <FlatList
             style={{ maxHeight: theme.layout.height / 3 }}
             data={options}
+            ItemSeparatorComponent={Divider}
             ListHeaderComponent={
-              <MenuItem
-                name={defaultValue}
-                onPress={handleSelection(null)}
-                selected={value === null}
-              />
+              <>
+                <MenuItem
+                  name={defaultValue}
+                  onPress={handleSelection(null)}
+                  selected={value === null}
+                />
+                <Divider />
+              </>
             }
+            keyExtractor={(item) => item.id.toString()}
             renderItem={({ item }) => (
               <MenuItem
-                key={item.id}
                 name={item.name}
                 onPress={handleSelection(item)}
                 selected={value?.id == item.id}

@@ -8,3 +8,4 @@ export * from "./game-settings";
 export * from "./game-settings-card";
 export * from "./answer-card";
 export * from "./container";
+export * from "./divider";

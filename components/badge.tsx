@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { memo, useContext } from "react";
 import { ThemeContext } from "styled-components/native";
 import { Text } from "./text";
 import { Box } from "./box";
@@ -8,7 +8,7 @@ export interface BadgeProps {
   label: string;
 }
 
-export function Badge({ color, label }: BadgeProps) {
+export const Badge = memo(({ color, label }: BadgeProps) => {
   const theme = useContext(ThemeContext);
   return (
     <Box bg={color} borderRadius={4} paddingX={2} paddingY={1}>
@@ -24,4 +24,4 @@ export function Badge({ color, label }: BadgeProps) {
       </Text>
     </Box>
   );
-}
+});
