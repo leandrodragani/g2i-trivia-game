@@ -76,7 +76,7 @@ export default function Home({ navigation }: HomeScreenProps) {
         fontFamily={theme.font.medium}
         color={theme.colors.gray[500]}
       >
-        Can you score 100% ?
+        Can you score 100%?
       </Text>
       <Box marginY={40}>
         <GameSettings

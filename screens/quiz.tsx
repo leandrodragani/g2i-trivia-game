@@ -135,9 +135,8 @@ export default function Quiz({ navigation, route }: QuizScreenProps) {
       </Box>
       <Box flex={1}>
         {answers.map((answer) => (
-          <Box marginBottom={16}>
+          <Box key={answer} marginBottom={16}>
             <AnswerCard
-              key={answer}
               {...{ answer }}
               onPress={makeAnswer(answer)}
               selected={currentAnswer === answer}
