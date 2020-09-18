@@ -9,7 +9,8 @@ interface AlertConfig {
 
 export function useBeforeLeave(
   dependsOn: boolean,
-  { title, message }: AlertConfig
+  { title, message }: AlertConfig,
+  callback?: () => void
 ) {
   const navigation = useNavigation();
   useEffect(
@@ -26,7 +27,12 @@ export function useBeforeLeave(
           {
             text: "Leave",
             style: "destructive",
-            onPress: () => navigation.dispatch(e.data.action),
+            onPress: () => {
+              if (callback) {
+                callback();
+              }
+              navigation.dispatch(e.data.action);
+            },
           },
         ]);
       }),

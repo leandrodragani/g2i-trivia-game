@@ -1,96 +1,58 @@
 import React, { useContext, useState, useEffect } from "react";
 import { ActivityIndicator } from "react-native";
 import { ThemeContext } from "styled-components/native";
-import useSWR from "swr";
 import { ScreenProps } from "navigation";
-import { Box, Text, Button, AnswerCard, Container } from "components";
-import { Result, Response } from "api";
-import { AllHtmlEntities } from "html-entities";
-import { objectToQueryParams } from "utils/strings";
-import { useBeforeLeave } from "utils/hooks";
-import { CommonActions } from "@react-navigation/native";
+import {
+  Box,
+  Text,
+  Button,
+  AnswerCard,
+  Container,
+  QuestionCard,
+} from "components";
+import { useBeforeLeave, useResults } from "utils/hooks";
 import { useGameSettings } from "context";
 
 type QuizScreenProps = ScreenProps<"Quiz">;
 
-function QuestionCard({ children }: { children: string }) {
-  const theme = useContext(ThemeContext);
-  const entities = new AllHtmlEntities();
-
-  return (
-    <Box
-      bg={theme.colors.gray[800]}
-      width={theme.layout.width - 50}
-      padding={16}
-      borderRadius={8}
-    >
-      <Text
-        color={theme.colors.white}
-        fontSize={18}
-        textAlign="center"
-        fontFamily={theme.font.semibold}
-        lineHeight="40px"
-      >
-        {entities.decode(children)}
-      </Text>
-    </Box>
-  );
+interface QuizState {
+  isGameInProgress: boolean;
+  userAnswers: any;
+  currentIndex: number;
 }
 
-function useResults(shouldFetch: boolean, options: any) {
-  const queryString = objectToQueryParams(options);
-
-  const { data, isValidating } = useSWR<Response<Result>>(
-    shouldFetch ? `/api.php?${queryString}` : null,
-    {
-      revalidateOnFocus: false,
-    }
-  );
-
-  return { data, isValidating };
-}
+const initialState: QuizState = {
+  isGameInProgress: true,
+  userAnswers: {},
+  currentIndex: 0,
+};
 
 export default function Quiz({ navigation }: QuizScreenProps) {
   const theme = useContext(ThemeContext);
-  const {
-    state: { category, difficulty, gameType },
-  } = useGameSettings();
-  const { data: results, isValidating } = useResults(true, {
-    category: category?.id,
-    type: gameType?.id,
-    difficulty: difficulty?.id,
-    amount: 10,
-  });
-  const [isGameInProgress, setIsGameInProgress] = useState<boolean>(true);
-  const [userAnswers, setUserAnswers] = useState({});
-  const [currentAnswer, setCurrentAnswer] = useState<string>("");
-  const [currentIndex, setCurrentIndex] = useState<number>(0);
+  const [state, setState] = useState<QuizState>(initialState);
+  const { clearSettings } = useGameSettings();
+  const { results, isValidating } = useResults();
 
-  useBeforeLeave(isGameInProgress, {
-    title: "Exit game",
-    message: "You will lose your progress, are you sure you want to leave?",
-  });
+  const { isGameInProgress, userAnswers, currentIndex } = state;
+
+  useBeforeLeave(
+    isGameInProgress,
+    {
+      title: "Exit game",
+      message: "You will lose your progress, are you sure you want to leave?",
+    },
+    clearSettings
+  );
 
   useEffect(() => {
     if (!isGameInProgress) {
-      const resetAction = CommonActions.reset({
-        index: 0,
-        routes: [
-          { name: "Home" },
-          {
-            name: "Results",
-            params: {
-              answers: userAnswers,
-              results: results?.results,
-            },
-          },
-        ],
+      navigation.navigate("Results", {
+        answers: userAnswers,
       });
-      navigation.dispatch(resetAction);
     }
   }, [isGameInProgress, navigation]);
 
-  if (!results || isValidating) {
+  if (results.length === 0 || isValidating) {
     return (
       <Container>
         <ActivityIndicator color={theme.colors.gray[500]} size="large" />
@@ -98,26 +60,23 @@ export default function Quiz({ navigation }: QuizScreenProps) {
     );
   }
 
-  const makeAnswer = (answer: string) => () => setCurrentAnswer(answer);
+  const makeAnswer = (answer: string) => () =>
+    setState({
+      ...state,
+      userAnswers: { ...userAnswers, [currentIndex]: answer },
+    });
 
   const handleNext = () => {
-    setUserAnswers({ ...userAnswers, [currentIndex]: currentAnswer });
-    setCurrentAnswer("");
-    if (currentIndex === results.results.length - 1) {
-      setIsGameInProgress(false);
+    if (currentIndex === results.length - 1) {
+      setState({ ...state, isGameInProgress: false });
     } else {
-      setCurrentIndex(currentIndex + 1);
+      setState({ ...state, currentIndex: currentIndex + 1 });
     }
   };
 
-  const {
-    category: resultsCategory,
-    question,
-    correct_answer,
-    incorrect_answers,
-  } = results.results[currentIndex];
+  const { category, question, answers } = results[currentIndex];
 
-  const answers = [correct_answer, ...incorrect_answers];
+  const currentAnswer = userAnswers[currentIndex];
 
   return (
     <Container>
@@ -129,7 +88,7 @@ export default function Quiz({ navigation }: QuizScreenProps) {
           fontFamily={theme.font.medium}
           textAlign="center"
         >
-          {resultsCategory}
+          {category}
         </Text>
         <QuestionCard>{question}</QuestionCard>
       </Box>

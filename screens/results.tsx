@@ -3,8 +3,7 @@ import { FlatList, TouchableOpacity } from "react-native";
 import { ThemeContext } from "styled-components/native";
 import { ScreenProps } from "navigation";
 import { AnswerCard, Button, Container, Text, Box } from "components";
-import { AllHtmlEntities } from "html-entities";
-import { useModal } from "utils/hooks";
+import { useModal, useResults } from "utils/hooks";
 import { Ionicons } from "@expo/vector-icons";
 import { StackActions } from "@react-navigation/native";
 import { useGameSettings } from "context";
@@ -25,7 +24,6 @@ function ResultItem({
   userAnswer,
 }: ResultItemProps) {
   const theme = useContext(ThemeContext);
-  const entities = new AllHtmlEntities();
   const { isVisible, toggle } = useModal();
 
   return (
@@ -42,7 +40,7 @@ function ResultItem({
           marginBottom={16}
         >
           <Text color="white" fontSize={16} fontFamily={theme.font.medium}>
-            {entities.decode(question)}
+            {question}
           </Text>
           <Ionicons
             name={`md-arrow-drop${isVisible ? "up" : "down"}`}
@@ -69,8 +67,9 @@ function ResultItem({
 export default function Results({ navigation, route }: ResultsScreenProps) {
   const theme = useContext(ThemeContext);
   const { clearSettings } = useGameSettings();
-  const { answers: userAnswers, results } = route.params;
-  const correctAnswers = results.filter(
+  const { results, questionsAmount } = useResults({ revalidateOnMount: false });
+  const { answers: userAnswers } = route.params;
+  const correctAnswersCount = results.filter(
     ({ correct_answer }, index) => userAnswers[index] === correct_answer
   ).length;
 
@@ -86,24 +85,21 @@ export default function Results({ navigation, route }: ResultsScreenProps) {
           Your score
         </Text>
         <Text fontSize={24} color="white">
-          {correctAnswers} / 10
+          {correctAnswersCount} / {questionsAmount}
         </Text>
       </Box>
       <Box flex={2} marginBottom={24}>
         <FlatList
           data={results}
           keyExtractor={(item) => item.question}
-          renderItem={({ item, index }) => {
-            const answers = [item.correct_answer, ...item.incorrect_answers];
-            return (
-              <ResultItem
-                {...{ answers }}
-                question={item.question}
-                userAnswer={userAnswers[index]}
-                correct_answer={item.correct_answer}
-              />
-            );
-          }}
+          renderItem={({ item, index }) => (
+            <ResultItem
+              {...{ answers: item.answers }}
+              question={item.question}
+              userAnswer={userAnswers[index]}
+              correct_answer={item.correct_answer}
+            />
+          )}
         />
       </Box>
       <Box marginBottom={24}>

@@ -5,12 +5,15 @@ import Quiz from "screens/quiz";
 import Results from "screens/results";
 import { Result } from "api";
 
+interface Answers {
+  [key: number]: string;
+}
+
 export type RootStackParamList = {
   Home: undefined;
   Quiz: undefined;
   Results: {
-    answers: any;
-    results: Result[];
+    answers: Answers;
   };
 };
 

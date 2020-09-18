@@ -4,7 +4,6 @@ import { ThemeContext } from "styled-components/native";
 import { Ionicons } from "@expo/vector-icons";
 import { Text } from "./text";
 import { Box } from "./box";
-import { AllHtmlEntities } from "html-entities";
 
 export interface AnswerCardProps extends TouchableOpacityProps {
   answer: string;
@@ -15,7 +14,6 @@ export interface AnswerCardProps extends TouchableOpacityProps {
 export const AnswerCard = memo(
   ({ answer, selected, error, ...props }: AnswerCardProps) => {
     const theme = useContext(ThemeContext);
-    const entities = new AllHtmlEntities();
     const {
       colors: { red, green, gray, white },
       layout: { width },
@@ -40,7 +38,7 @@ export const AnswerCard = memo(
             fontFamily={medium}
             fontSize={16}
           >
-            {entities.decode(answer)}
+            {answer}
           </Text>
           {selected ? (
             <Ionicons

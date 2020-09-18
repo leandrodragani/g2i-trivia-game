@@ -1,5 +1,4 @@
-import { useContext } from "react";
-import { AllHtmlEntities } from "html-entities";
+import React, { useContext } from "react";
 import { ThemeContext } from "styled-components/native";
 import { Box } from "./box";
 import { Text } from "./text";
@@ -10,7 +9,6 @@ export interface QuestionCardProps {
 
 export function QuestionCard({ children }: QuestionCardProps) {
   const theme = useContext(ThemeContext);
-  const entities = new AllHtmlEntities();
 
   return (
     <Box
@@ -26,7 +24,7 @@ export function QuestionCard({ children }: QuestionCardProps) {
         fontFamily={theme.font.semibold}
         lineHeight="40px"
       >
-        {entities.decode(children)}
+        {children}
       </Text>
     </Box>
   );
