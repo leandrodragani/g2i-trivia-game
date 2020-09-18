@@ -3,8 +3,6 @@ import { createStackNavigator } from "@react-navigation/stack";
 import Home from "screens/home";
 import Quiz from "screens/quiz";
 import Results from "screens/results";
-import { Result } from "api";
-
 interface Answers {
   [key: number]: string;
 }

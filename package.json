@@ -9,7 +9,18 @@
     "test": "jest --watchAll"
   },
   "jest": {
-    "preset": "jest-expo"
+    "preset": "jest-expo",
+    "setupFilesAfterEnv": [
+      "@testing-library/jest-native/extend-expect"
+    ],
+    "setupFiles": [
+      "<rootDir>/jestSetup.js"
+    ],
+    "moduleDirectories": [
+      "node_modules",
+      "utils",
+      "__dirname"
+    ]
   },
   "dependencies": {
     "@expo/vector-icons": "^10.0.0",
