@@ -2,7 +2,7 @@ import React from "react";
 import { fireEvent, render, waitFor } from "utils/test-utils";
 import { RootStackNavigator } from "navigation";
 
-test("show game settings with defaults values", async () => {
+test("show correct title when i click a game setting", async () => {
   const { getByText, findByText } = render(<RootStackNavigator />);
 
   await waitFor(async () => {

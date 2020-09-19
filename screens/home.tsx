@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { StackActions } from "@react-navigation/native";
 import { ThemeContext } from "styled-components/native";
 import useSWR from "swr";
@@ -12,7 +12,7 @@ import {
   Button,
   GameSettings,
 } from "components";
-import { useGameSettings } from "context";
+import { useGameSettings, useToast } from "context";
 
 type HomeScreenProps = ScreenProps<"Home">;
 
@@ -29,10 +29,21 @@ const gameTypes: GameSettingsOption[] = [
 
 export default function Home({ navigation }: HomeScreenProps) {
   const { state, setSettings } = useGameSettings();
+  const { showToast, ToastType } = useToast();
   const theme = useContext(ThemeContext);
   const { data: categories, error } = useSWR<CategoryResponse>(
-    "/api_category.php"
+    "/api_category.phsp",
+    { shouldRetryOnError: false }
   );
+
+  useEffect(() => {
+    if (error) {
+      showToast(
+        ToastType.Error,
+        "An error has ocurred when trying to fetch categories."
+      );
+    }
+  }, [error]);
 
   const startQuiz = () => navigation.dispatch(StackActions.push("Quiz"));
 

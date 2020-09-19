@@ -1,8 +1,9 @@
 import useSWR, { ConfigInterface } from "swr";
-import { useGameSettings } from "context";
+import { useGameSettings, useToast } from "context";
 import { objectToQueryParams } from "utils/strings";
 import { CategoryCount, Response, Result } from "api";
 import { AllHtmlEntities } from "html-entities";
+import { useEffect } from "react";
 
 interface DecodedResult extends Result {
   answers: string[];
@@ -59,6 +60,7 @@ function useQuestionsAmount() {
 
 export function useResults(config?: ConfigInterface) {
   const { state } = useGameSettings();
+  const { showToast, ToastType } = useToast();
   const amount = useQuestionsAmount();
   const queryString = objectToQueryParams({
     category: state.category?.id,
@@ -74,11 +76,19 @@ export function useResults(config?: ConfigInterface) {
       ...config,
     }
   );
-  console.log(data);
+
+  useEffect(() => {
+    if (error) {
+      showToast(
+        ToastType.Error,
+        "An error has ocurred when trying to fetch categories."
+      );
+    }
+  }, [error]);
+
   return {
     results: data ? data.results.map(decodeResult) : [],
     isValidating,
-    error,
     questionsAmount: amount,
   };
 }
