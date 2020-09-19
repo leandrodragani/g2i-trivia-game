@@ -29,7 +29,7 @@ function useQuestionsAmount() {
   const {
     state: { category, difficulty },
   } = useGameSettings();
-  const amount: number = 15;
+  const amount: number = 10;
   const { data } = useSWR<CategoryCount>(
     category ? `/api_count.php?category=${category.id}` : null
   );
