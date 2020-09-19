@@ -25,21 +25,40 @@ function ResultItem({
 }: ResultItemProps) {
   const theme = useContext(ThemeContext);
   const { isVisible, toggle } = useModal();
+  const {
+    layout: { width },
+    colors: { gray, green, red },
+    font: { medium },
+  } = theme;
+
+  const isAnswerCorrect = correct_answer === userAnswer;
 
   return (
     <>
       <TouchableOpacity onPress={toggle}>
         <Box
           flexDirection="row"
-          width={theme.layout.width - 50}
-          bg={theme.colors.gray[800]}
+          width={width - 50}
+          bg={gray[800]}
           alignItems="center"
           justifyContent="space-between"
           borderRadius={8}
           padding={16}
           marginBottom={16}
         >
-          <Text color="white" fontSize={16} fontFamily={theme.font.medium}>
+          <Ionicons
+            name={`ios-${isAnswerCorrect ? "checkmark" : "close"}-circle`}
+            size={20}
+            color={isAnswerCorrect ? green[500] : red[500]}
+            style={{ marginRight: 8 }}
+          />
+          <Text
+            flexWrap="wrap"
+            flex={1}
+            color="white"
+            fontSize={16}
+            fontFamily={medium}
+          >
             {question}
           </Text>
           <Ionicons

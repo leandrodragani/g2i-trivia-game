@@ -7,11 +7,11 @@ export interface TextProps
     SS.SpaceProps,
     SS.TypographyProps,
     SS.ColorProps,
-    SS.FlexProps {}
+    SS.FlexboxProps {}
 
 export const Text = styled.Text<TextProps>`
   ${SS.space}
   ${SS.color}
   ${SS.typography}
-  ${SS.flex}
+  ${SS.flexbox}
 `;
