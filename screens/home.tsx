@@ -32,7 +32,7 @@ export default function Home({ navigation }: HomeScreenProps) {
   const { showToast, ToastType } = useToast();
   const theme = useContext(ThemeContext);
   const { data: categories, error } = useSWR<CategoryResponse>(
-    "/api_category.phsp",
+    "/api_category.php",
     { shouldRetryOnError: false }
   );
 

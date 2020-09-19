@@ -11,3 +11,4 @@ export * from "./container";
 export * from "./divider";
 export * from "./question-card";
 export * from "./toast";
+export * from "./message-warning";

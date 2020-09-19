@@ -6,7 +6,7 @@ import { StatusBar } from "expo-status-bar";
 import { ThemeProvider } from "styled-components/native";
 import { SWRConfig } from "swr";
 import { RootStackNavigator } from "navigation";
-import { GameSettingsProvider, ToastProvider } from "context";
+import { GameSettingsProvider, ToastProvider, ErrorBoundary } from "context";
 import { useCachedResources } from "utils/hooks";
 import { fetcher } from "utils/axios";
 import theme from "styles/theme";
@@ -22,22 +22,24 @@ export default function App() {
 
   return (
     <ThemeProvider {...{ theme }}>
-      <SWRConfig
-        value={{
-          fetcher,
-        }}
-      >
-        <SafeAreaProvider>
-          <NavigationContainer>
-            <ToastProvider>
-              <GameSettingsProvider>
-                <RootStackNavigator />
-                <StatusBar style="light" />
-              </GameSettingsProvider>
-            </ToastProvider>
-          </NavigationContainer>
-        </SafeAreaProvider>
-      </SWRConfig>
+      <ErrorBoundary>
+        <SWRConfig
+          value={{
+            fetcher,
+          }}
+        >
+          <SafeAreaProvider>
+            <NavigationContainer>
+              <ToastProvider>
+                <GameSettingsProvider>
+                  <RootStackNavigator />
+                  <StatusBar style="light" />
+                </GameSettingsProvider>
+              </ToastProvider>
+            </NavigationContainer>
+          </SafeAreaProvider>
+        </SWRConfig>
+      </ErrorBoundary>
     </ThemeProvider>
   );
 }

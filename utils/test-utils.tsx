@@ -3,6 +3,8 @@ import { NavigationContainer } from "@react-navigation/native";
 import { render, RenderOptions } from "@testing-library/react-native";
 import { ThemeProvider } from "styled-components/native";
 import theme from "styles/theme";
+import { ToastProvider } from "context";
+import { SafeAreaProvider } from "react-native-safe-area-context";
 
 interface WrappedProvidersProps {
   children: React.ReactNode;
@@ -11,7 +13,11 @@ interface WrappedProvidersProps {
 const WrappedProviders = ({ children }: WrappedProvidersProps) => {
   return (
     <ThemeProvider {...{ theme }}>
-      <NavigationContainer>{children}</NavigationContainer>
+      <SafeAreaProvider>
+        <NavigationContainer>
+          <ToastProvider>{children}</ToastProvider>
+        </NavigationContainer>
+      </SafeAreaProvider>
     </ThemeProvider>
   );
 };

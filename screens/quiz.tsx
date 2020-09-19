@@ -9,6 +9,7 @@ import {
   AnswerCard,
   Container,
   QuestionCard,
+  MessageWarning,
 } from "components";
 import { useBeforeLeave, useResults } from "utils/hooks";
 import { useGameSettings } from "context";
@@ -69,37 +70,11 @@ export default function Quiz({ navigation }: QuizScreenProps) {
     const goBack = () => setState({ ...state, isGameInProgress: false });
 
     return (
-      <Container>
-        <Box
-          paddingX={10}
-          alignItems="center"
-          justifyContent="center"
-          marginY={4}
-        >
-          <Text
-            fontSize={30}
-            color={theme.colors.white}
-            fontFamily={theme.font.semibold}
-            textAlign="center"
-          >
-            There is no results for the game settings you selected.
-          </Text>
-          <Text
-            fontSize={16}
-            color={theme.colors.gray[500]}
-            fontFamily={theme.font.regular}
-            marginTop={3}
-            textAlign="center"
-          >
-            Maybe change the settings and try again?
-          </Text>
-        </Box>
-        <Button
-          backgroundColor={theme.colors.red[500]}
-          label="Change settings"
-          onPress={goBack}
-        />
-      </Container>
+      <MessageWarning
+        title="There is no results for the game settings you selected."
+        message="Maybe change the settings and try again?"
+        buttonProps={{ label: "Change settings", onPress: goBack }}
+      />
     );
   }
 
