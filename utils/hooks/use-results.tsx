@@ -81,7 +81,7 @@ export function useResults(config?: ConfigInterface) {
     if (error) {
       showToast(
         ToastType.Error,
-        "An error has ocurred when trying to fetch categories."
+        "An error has ocurred when trying to fetch results."
       );
     }
   }, [error]);
