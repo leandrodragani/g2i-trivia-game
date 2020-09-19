@@ -29,7 +29,7 @@ function useQuestionsAmount() {
   const {
     state: { category, difficulty },
   } = useGameSettings();
-  const amount: number = 10;
+  const amount: number = 15;
   const { data } = useSWR<CategoryCount>(
     category ? `/api_count.php?category=${category.id}` : null
   );
@@ -74,7 +74,7 @@ export function useResults(config?: ConfigInterface) {
       ...config,
     }
   );
-
+  console.log(data);
   return {
     results: data ? data.results.map(decodeResult) : [],
     isValidating,

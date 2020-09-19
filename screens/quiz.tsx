@@ -32,7 +32,7 @@ export default function Quiz({ navigation }: QuizScreenProps) {
   const [state, setState] = useState<QuizState>(initialState);
   const { clearSettings } = useGameSettings();
   const { results, isValidating } = useResults();
-
+  const noResults = results.length === 0;
   const { isGameInProgress, userAnswers, currentIndex } = state;
 
   useBeforeLeave(
@@ -45,6 +45,11 @@ export default function Quiz({ navigation }: QuizScreenProps) {
   );
 
   useEffect(() => {
+    if (noResults && !isGameInProgress) {
+      navigation.goBack();
+      return;
+    }
+
     if (!isGameInProgress) {
       navigation.navigate("Results", {
         answers: userAnswers,
@@ -52,10 +57,48 @@ export default function Quiz({ navigation }: QuizScreenProps) {
     }
   }, [isGameInProgress, navigation]);
 
-  if (results.length === 0 || isValidating) {
+  if (isValidating) {
     return (
       <Container>
         <ActivityIndicator color={theme.colors.gray[500]} size="large" />
+      </Container>
+    );
+  }
+
+  if (noResults) {
+    const goBack = () => setState({ ...state, isGameInProgress: false });
+
+    return (
+      <Container>
+        <Box
+          paddingX={10}
+          alignItems="center"
+          justifyContent="center"
+          marginY={4}
+        >
+          <Text
+            fontSize={30}
+            color={theme.colors.white}
+            fontFamily={theme.font.semibold}
+            textAlign="center"
+          >
+            There is no results for the game settings you selected.
+          </Text>
+          <Text
+            fontSize={16}
+            color={theme.colors.gray[500]}
+            fontFamily={theme.font.regular}
+            marginTop={3}
+            textAlign="center"
+          >
+            Maybe change the settings and try again?
+          </Text>
+        </Box>
+        <Button
+          backgroundColor={theme.colors.red[500]}
+          label="Change settings"
+          onPress={goBack}
+        />
       </Container>
     );
   }
