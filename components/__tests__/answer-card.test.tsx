@@ -2,10 +2,21 @@ import React from "react";
 import { render } from "utils/test-utils";
 import { AnswerCard } from "../answer-card";
 
-test("get selected when i click it", () => {
-  const { getByText, findByText } = render(
-    <AnswerCard answer="Hi i'm an answer" />
+test("must be selected when i press it", async () => {
+  const { toJSON, findByText, findByTestId } = render(
+    <AnswerCard answer="Answer" selected />
   );
 
-  expect(getByText("Hi i'm an answer")).toBeTruthy();
+  const icon = findByTestId("selectedIcon");
+  expect(icon).toBeTruthy();
+
+  expect(findByText("Answer")).toBeTruthy();
+  expect(toJSON).toMatchSnapshot();
+});
+
+test("must show error icon when answer is incorrect", async () => {
+  const { findByTestId } = render(<AnswerCard answer="Answer" error />);
+
+  const icon = findByTestId("errorIcon");
+  expect(icon).toBeTruthy();
 });

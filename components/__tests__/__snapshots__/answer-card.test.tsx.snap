@@ -1,0 +1,5 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`get selected when i click it 1`] = `[Function]`;
+
+exports[`must be selected when i press it 1`] = `[Function]`;

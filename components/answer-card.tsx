@@ -21,7 +21,7 @@ export const AnswerCard = memo(
     } = theme;
 
     return (
-      <TouchableOpacity {...props} activeOpacity={0.75}>
+      <TouchableOpacity {...props} activeOpacity={0.75} testID="button">
         <Box
           flexDirection="row"
           border={1}
@@ -45,9 +45,10 @@ export const AnswerCard = memo(
               name="ios-checkmark-circle"
               size={20}
               color={green[500]}
+              testID="selectedIcon"
             />
           ) : error ? (
-            <Ionicons name="ios-close-circle" size={20} color={red[500]} />
+            <Ionicons name="ios-close-circle" size={20} color={red[500]} testID="errorIcon" />
           ) : null}
         </Box>
       </TouchableOpacity>
