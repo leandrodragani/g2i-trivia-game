@@ -5,7 +5,7 @@ import { Text } from "./text";
 import { Box } from "./box";
 import { Badge } from "./badge";
 
-interface GameSettingsCardProps {
+export interface GameSettingsCardProps {
   label: string;
   value: string;
   onPress: () => void;

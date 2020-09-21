@@ -2,14 +2,13 @@ import React from "react";
 import { render } from "utils/test-utils";
 import { AnswerCard } from "../answer-card";
 
-test("must be selected when i press it", async () => {
+test("must show selected icon", async () => {
   const { toJSON, findByText, findByTestId } = render(
     <AnswerCard answer="Answer" selected />
   );
 
   const icon = findByTestId("selectedIcon");
   expect(icon).toBeTruthy();
-
   expect(findByText("Answer")).toBeTruthy();
   expect(toJSON).toMatchSnapshot();
 });
